@@ -13,18 +13,15 @@
 <body>
     <div class="row">
         <div class="input-field col s2">
-            <input placeholder="Name" name='name' id="name" type="text" class="validate">
-            <label for="search">Material Name</label>
+            <input placeholder="M1 Value" name='m1' id="m1" type="text" class="validate">
+            <label for="search">M1 Value</label>
+        </div>
+        <div class="input-field col s2">
+            <input placeholder="M2 Value" name='m2' id="m2" type="text" class="validate">
+            <label for="search">M2 Value</label>
         </div>
 
-        <div class="input-field col">
-            <select name="selectedOption" id="selectedOption">
-                <option value="" disabled selected>Choose your option</option>
-                <option value="m2">M2</option>
-                <option value="m1">M1</option>
-            </select>
-            <label>Select Option</label>
-        </div>
+
     </div>
     <button class="btn waves-effect waves-light" type="button" name="btnSubmit" onclick="searchData();">Search </button>
     <div id="objects" class="row">
@@ -38,8 +35,8 @@
 
         function searchData() {
             var data = {
-                selectedOption: $("#selectedOption").val(),
-                name: $("#name").val(),
+                m1: $("#m1").val(),
+                m2: $("#m2").val(),
 
             };
             fetch('/search', {
@@ -58,29 +55,32 @@
                     const objid = document.getElementById('objects');
                     objid.innerHTML = ``;
                     var elem = 'No Result'
-                    if (datas) {
+                    if (datas.length > 0) {
+                        datas.forEach(data => {
 
-                        //for n data items, change html elemets
-                        var name = datas.name;
-                        var type = datas.type;
-                        var range = datas.data;
-                        var comment = datas.comments;
-                        elem =
-                            `
+
+                            //for n data items, change html elemets
+                            var name = data.name;
+                            var type = data.type;
+                            var range = data.range;
+                            var comment = data.comment;
+                            elem =
+                                `
                         <div class="col s12 m4">
                             <div class="card blue-grey darken-1">
                                 <div class="card-content white-text">
                                     <span class="card-title">${name}</span>
                                     <p>Type: ${type}<br>
-                                    Range: ${range}<br>                            
-                                     ${comment}<br>                            
+                                        Range: ${range}<br>                            
+                                        ${comment}<br>                            
                                     </p>
-                                </div>  
-                            </div>
-                        </div>
-                 
-                     `
-                        objid.innerHTML += elem;
+                                    </div>  
+                                    </div>
+                                    </div>
+                                    
+                                    `
+                            objid.innerHTML += elem;
+                        });
 
                     } else {
                         objid.innerHTML += elem;
@@ -91,6 +91,8 @@
 
                 })
                 .catch(err => console.log(err));
+
+
 
         }
 
